@@ -11,19 +11,26 @@ func main() {
 	//http.Handle("/metrics", promhttp.Handler())
 	//http.ListenAndServe(":2112", nil)
 
-	git, err := gitlab.NewClient("glpat-9FzGyni45Y2CiNes7eZW")
+	git, err := gitlab.NewClient("glpat-z--Z5zKs_cr9WcHb2_sp")
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	//users, _, err := git.Users.ListUsers(&gitlab.ListUsersOptions{})
 
-	// List all projects
-	projects, _, err := git.Projects.ListProjects(&gitlab.ListProjectsOptions{})
+	members, _, err := git.ProjectMembers.ListAllProjectMembers(54222730, &gitlab.ListProjectMembersOptions{})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	for _, project := range projects {
-		fmt.Println(project.Name)
+	for _, member := range members {
+		s := gitlab.ListCommitsOptions{
+			Author: gitlab.Ptr(member.Name),
+		}
+
+		commits, _, err := git.Commits.ListCommits(54222730, &s)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		fmt.Println(member.Name, len(commits))
 	}
 }
