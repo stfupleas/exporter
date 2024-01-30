@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 
 	"github.com/xanzy/go-gitlab"
 )
@@ -11,7 +14,19 @@ func main() {
 	//http.Handle("/metrics", promhttp.Handler())
 	//http.ListenAndServe(":2112", nil)
 
-	git, err := gitlab.NewClient("glpat-z--Z5zKs_cr9WcHb2_sp")
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Print("Enter key: ")
+
+	input, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Error reading input:", err)
+		return
+	}
+
+	input = strings.TrimSpace(input)
+
+	git, err := gitlab.NewClient(input)
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
