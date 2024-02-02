@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  exporter:
+    environment:
+      - GITLAB_API_KEY=${GITLAB_API_KEY}
+      - GITLAB_PROJECT_ID=${GITLAB_PROJECT_ID}
+    env_file:
+      - .env
